@@ -1,82 +1,34 @@
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.before = None
 
-class Stack:
-    def __init__(self):
-        self.pointer = None
-
-    def isEmpty(self):
-        if self.pointer is None:
-            return True
+def printArray(array):
+    for i in array:
+        if i == array[-1]:
+            print(i, end="")
         else:
-            return False
-        
-    def pop(self):
-        if self.pointer is None:
-            print('Empty stack.')
-            return
-        elif self.pointer.before is None:
-            self.pointer = None
-            return
-        self.pointer = self.pointer.before
-
-    def push(self, data):
-        node = Node(data)
-        node.before = self.pointer
-        self.pointer = node
-    
-    def print(self):
-        if self.pointer is None:
-            print('Empty stack.')
-            return
-        node = self.pointer
-        while node.before is not None:
-            print(node.data, end=" ")
-            node = node.before
-        print(node.data, end="")
-
-def result(toTransfer):
-    result = Stack()
-    while not toTransfer.isEmpty():
-        result.push(toTransfer.pointer.data)
-        toTransfer.pop()
-        result.print()
+            print(i, end=" ")
 
 list = input().split()
-left = Stack()
-right = Stack()
-temp = Stack()
-
-while not right.isEmpty():
-    temp.push(right.pointer.data)
-    left.pop()
-
-left = temp
+left = []
+right = []
 
 for i in list:
-    if int(i) < 0:
-        right.push(int(i))
+    if int(i) > 0:
+        left.append(int(i))
+    elif int(i) < 0:
+        right.append(int(i))
+
+while len(left) != 0 and len(right) != 0:
+    if left[-1] > abs(right[0]):
+        right.pop(0)
+    elif left[-1] < abs(right[0]):
+        left.pop()
     else:
-        left.push(int(i))
-
-while (not left.isEmpty()) and (not right.isEmpty()):
-    r1 = left.pointer.data
-    r2 = abs(right.pointer.data)
-    if r1 > r2:
-        right.pop()
-    elif r2 > r1:
+        right.pop(0)
         left.pop()
-    else: 
-        left.pop()
-        right.pop()
 
-if left.isEmpty() and not right.isEmpty():
-    result(right)
-elif right.isEmpty and not left.isEmpty():
-    result(left)
+if len(left) == 0 and len(right) != 0:
+    printArray(right)
+elif len(left) != 0 and len(right) == 0: 
+    printArray(left)
 else:
-    print('No quedaron robots!', end="")
-
+    print("No quedaron robots!", end="")
 
